@@ -1,0 +1,27 @@
+# ===== Mauli Mobile Wala — hosting settings (Apache / LiteSpeed, e.g. Hostinger) =====
+Options -Indexes
+RewriteEngine On
+RewriteBase /
+
+# Always use HTTPS (turn on only after SSL is active — remove the # on the 2 lines below)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Backend folders (if added later) work normally
+RewriteCond %{REQUEST_URI} ^/(api|admin|uploads)(/|$) [NC]
+RewriteRule ^ - [L]
+
+# All website pages -> React (so /about, /stores work on refresh)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+# Speed: cache images/CSS/JS
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>

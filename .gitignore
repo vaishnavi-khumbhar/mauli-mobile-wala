@@ -1,0 +1,5 @@
+node_modules
+dist
+image-originals
+.DS_Store
+Thumbs.db
