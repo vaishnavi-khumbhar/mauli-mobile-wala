@@ -70,14 +70,31 @@ export function ImageReveal({ children, className = "", delay = 0 }) {
 
 export function Page({ children }) {
   return (
-    <motion.main
-      id="main"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.45, ease }}
-    >
-      {children}
-    </motion.main>
+    <>
+      {/* Page-change curtain: pink + dark panels sweep up and away */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[90] origin-top bg-blue"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        transition={{ duration: 0.65, ease, delay: 0.05 }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[91] origin-top bg-[#0B0B0D]"
+        initial={{ scaleY: 1 }}
+        animate={{ scaleY: 0 }}
+        transition={{ duration: 0.55, ease }}
+      />
+      <motion.main
+        id="main"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.6, ease, delay: 0.25 }}
+      >
+        {children}
+      </motion.main>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import PageHero from "../components/PageHero";
 import ImageSlot from "../components/ImageSlot";
 import Button from "../components/Button";
 import CtaBanner from "../components/CtaBanner";
+import FranchiseCta from "../components/FranchiseCta";
 import { Whatsapp } from "../components/SocialIcons";
 
 export default function Stores() {
@@ -39,7 +40,7 @@ export default function Stores() {
         <div className="container-site">
           <Stagger className="grid gap-6 md:grid-cols-2 lg:gap-8" s={0.12}>
             {stores.map((s, i) => (
-              <Item key={s.no} as="article" className="card group flex flex-col overflow-hidden hover:shadow-card">
+              <Item key={s.no} as="article" className="card shine-card group flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_50px_-20px_rgba(238,20,80,0.45)]">
                 <div className="relative aspect-[16/9] overflow-hidden">
                   <ImageSlot
                     src={s.image}
@@ -52,6 +53,11 @@ export default function Stores() {
                   <span className="absolute left-4 top-4 bg-white/95 px-3 py-1 font-serif text-sm font-semibold text-navy">
                     Store {s.no}
                   </span>
+                  {s.tag && (
+                    <span className="absolute right-4 top-4 rounded-full bg-blue px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-card">
+                      {s.tag}
+                    </span>
+                  )}
                 </div>
                 <div className="relative flex flex-1 flex-col p-6 md:p-7">
                   <span className="absolute left-6 top-0 h-[2px] w-10 bg-gold md:left-7" aria-hidden="true" />
@@ -144,6 +150,8 @@ export default function Stores() {
           </Reveal>
         </div>
       </section>
+
+      <FranchiseCta />
 
       <CtaBanner title="Have a Question Before You Visit?" text="Call or WhatsApp us — our team will be happy to help." cta="Contact Us" to="/contact" />
     </Page>

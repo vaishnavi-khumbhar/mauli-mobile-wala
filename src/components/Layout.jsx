@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import MobileCTA from "./MobileCTA";
+import ScrollProgress from "./ScrollProgress";
 import { EnquiryProvider } from "./Enquiry";
 
 export default function Layout({ children }) {
@@ -14,6 +15,7 @@ export default function Layout({ children }) {
   return (
     <EnquiryProvider>
       <div className="flex min-h-screen flex-col">
+        <ScrollProgress />
         <Header />
         <div className="flex-1 pt-[105px] lg:pt-[117px]">{children}</div>
         <Footer />

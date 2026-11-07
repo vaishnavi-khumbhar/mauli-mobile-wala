@@ -6,6 +6,9 @@ import About from "./pages/About";
 import Products from "./pages/Products";
 import Contact from "./pages/Contact";
 import Stores from "./pages/Stores";
+import Franchise from "./pages/Franchise";
+import Articles from "./pages/Articles";
+import ArticleDetail from "./pages/ArticleDetail";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -14,12 +17,15 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="never">
       <Layout>
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/products" element={<Products />} />
             <Route path="/stores" element={<Stores />} />
+            <Route path="/franchise" element={<Franchise />} />
+            <Route path="/articles" element={<Articles />} />
+            <Route path="/articles/:slug" element={<ArticleDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/404" element={<NotFound />} />
             {/* Any unknown address shows the 404 page without changing the URL */}

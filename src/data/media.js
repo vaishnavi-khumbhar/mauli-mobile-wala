@@ -14,6 +14,7 @@
    - Product images ..... 1200 × 900
    - Section images ..... 1400 × 1000
    - Store photos ....... 1200 × 900
+   - Article covers ..... 1600 × 900  (article-1, article-2)
    ========================================================================== */
 
 // Loads every image inside src/assets/images automatically
@@ -49,6 +50,8 @@ export const media = {
     products: img("products-hero"),
     stores: img("stores-hero"),
     contact: img("contact-hero"),
+    franchise: img("franchise-hero"),
+    articles: img("articles-hero"), // Articles page (if missing, brand-story photo is used) // Franchise page (if missing, Talegaon store photo is used)
   },
 
   products: {
@@ -66,6 +69,12 @@ export const media = {
     storeInterior: img("store-interior"), // About page
     aboutDetail: img("about-detail"), // About page second image
     ctaBanner: img("cta-banner"), // full-width banner background at the bottom of pages
+  },
+
+  // Article cover images (built-in articles). Admin-panel articles upload their own image.
+  articles: {
+    "article-1": img("article-1"),
+    "article-2": img("article-2"),
   },
 
   stores: [img("store-1"), img("store-2"), img("store-3"), img("store-4")],

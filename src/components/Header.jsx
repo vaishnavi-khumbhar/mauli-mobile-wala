@@ -206,7 +206,7 @@ export default function Header() {
           <Logo scrolled={scrolled} />
 
           <nav aria-label="Main" className="hidden lg:block">
-            <ul className="flex items-center gap-6 xl:gap-9">
+            <ul className="flex items-center gap-6 xl:gap-8">
               {navLinks.map((l) =>
                 l.hasMenu ? (
                   <li key={l.to} className="relative" onMouseEnter={openMenu} onMouseLeave={closeMenu}>
@@ -231,6 +231,12 @@ export default function Header() {
                       className={({ isActive }) => `nav-link group relative block whitespace-nowrap py-2 font-serif text-[16px] font-medium text-navy xl:text-[18px] ${isActive ? "is-active" : ""}`}
                     >
                       {l.label}
+                      {l.highlight && (
+                        <span className="absolute -right-3 top-1.5 flex h-2 w-2" aria-hidden="true">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue opacity-75" />
+                          <span className="relative inline-flex h-2 w-2 rounded-full bg-blue" />
+                        </span>
+                      )}
                       <NavUnderline />
                     </NavLink>
                   </li>
@@ -240,7 +246,7 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link to="/contact" className="btn btn-primary hidden !px-5 !py-2.5 !text-[15px] sm:inline-flex">
+            <Link to="/contact" className="btn btn-primary hidden whitespace-nowrap !px-5 !py-2.5 !text-[15px] sm:inline-flex lg:hidden xl:inline-flex">
               <span>Enquire Now</span>
               <ArrowRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
             </Link>
@@ -291,7 +297,10 @@ export default function Header() {
                         `flex items-center justify-between py-4 font-serif text-[26px] ${isActive ? "text-gold" : "text-navy"}`
                       }
                     >
-                      {l.label}
+                      <span className="flex items-center gap-3">
+                        {l.label}
+                        {l.highlight && <span className="rounded-full bg-blue px-2.5 py-0.5 font-sans text-[11px] font-bold uppercase tracking-wider text-white">New</span>}
+                      </span>
                       <ArrowRight className="h-5 w-5 text-gold" strokeWidth={1.25} />
                     </NavLink>
                   </motion.li>

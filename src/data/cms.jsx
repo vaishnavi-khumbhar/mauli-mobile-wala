@@ -1,35 +1,44 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { products as staticProducts } from "./products";
-import { media } from "./media";
+import { products as staticProducts, categories as staticCategories } from "./products";
+import { articles as staticArticles } from "./articles";
 
 /* ==========================================================================
    WEBSITE DATA FROM THE ADMIN PANEL (PHP API)
    --------------------------------------------------------------------------
-   Products and gallery images come from the admin panel:
-     <VITE_API_URL>/products.php   and   <VITE_API_URL>/gallery.php
+   Categories, products and articles come from ONE request:
+       <VITE_API_URL>/site.php   →  { categories: [], products: [], articles: [] }
 
    VITE_API_URL is set in:
      .env.development  → laptop (XAMPP)   e.g. http://localhost/mauli-backend/api
      .env.production   → Hostinger        /api
 
-   Safety net: if the API cannot be reached, the website shows the last
-   data it received (saved in the browser), or else the built-in data from
-   products.js and the gallery folder — so the site never looks empty.
+   No VITE_API_URL → the website uses the built-in data
+   (products.js + articles.js), so it never looks empty.
+   If the API is down, the last data received (saved in the browser) is shown.
    ========================================================================== */
 
-// No VITE_API_URL → the site simply uses the built-in data (no admin backend yet)
 const API = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/+$/, "") : null;
-const CACHE_KEY = "mm_cms_v1";
+const CACHE_KEY = "mm_cms_v2";
 const TIMEOUT_MS = 8000;
 
-const builtIn = { products: staticProducts, gallery: media.gallery };
+const builtIn = { categories: staticCategories, products: staticProducts, articles: staticArticles };
 
 const CmsContext = createContext({ ...builtIn, status: "ready", source: "built-in" });
+
+/* Admin items without an uploaded image use the built-in photo with the same slug */
+const withImages = (list, builtInList) =>
+  list.map((x) => {
+    if (x.image) return x;
+    const b = builtInList.find((y) => y.slug === x.slug);
+    return b ? { ...x, image: b.image, imageKey: b.imageKey } : x;
+  });
+
+const valid = (d) => d && Array.isArray(d.categories) && Array.isArray(d.products) && Array.isArray(d.articles);
 
 function readCache() {
   try {
     const c = JSON.parse(localStorage.getItem(CACHE_KEY) || "null");
-    if (c && Array.isArray(c.products) && Array.isArray(c.gallery)) return c;
+    if (valid(c)) return c;
   } catch {
     /* storage blocked or bad data */
   }
@@ -44,20 +53,14 @@ function writeCache(data) {
   }
 }
 
-async function getJson(path, signal) {
-  const res = await fetch(`${API}/${path}`, { signal, cache: "no-store", headers: { Accept: "application/json" } });
-  if (!res.ok) throw new Error(`${path} → ${res.status}`);
-  return res.json();
-}
-
 export function CmsProvider({ children }) {
-  // Show saved data instantly on repeat visits, then refresh it in the background
+  // Saved data shows instantly on repeat visits, then refreshes in the background
   const [state, setState] = useState(() => {
     if (!API) return { ...builtIn, status: "ready", source: "built-in" };
     const cached = readCache();
     return cached
       ? { ...cached, status: "ready", source: "cache" }
-      : { products: [], gallery: [], status: "loading", source: "none" };
+      : { categories: [], products: [], articles: [], status: "loading", source: "none" };
   });
 
   useEffect(() => {
@@ -66,13 +69,21 @@ export function CmsProvider({ children }) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
 
-    Promise.all([getJson("products.php", ctrl.signal), getJson("gallery.php", ctrl.signal)])
-      .then(([products, gallery]) => {
-        if (!Array.isArray(products) || !Array.isArray(gallery?.items)) throw new Error("Unexpected API data");
-        const data = { products, gallery: gallery.items };
+    fetch(`${API}/site.php`, { signal: ctrl.signal, cache: "no-store", headers: { Accept: "application/json" } })
+      .then((r) => {
+        if (!r.ok) throw new Error(`site.php → ${r.status}`);
+        return r.json();
+      })
+      .then((data) => {
+        if (!valid(data)) throw new Error("Unexpected API data");
+        const clean = {
+          categories: data.categories,
+          products: withImages(data.products, staticProducts),
+          articles: withImages(data.articles, staticArticles),
+        };
         if (!alive) return;
-        setState({ ...data, status: "ready", source: "api" });
-        writeCache(data);
+        setState({ ...clean, status: "ready", source: "api" });
+        writeCache(clean);
       })
       .catch((err) => {
         if (!alive) return;
@@ -93,15 +104,23 @@ export function CmsProvider({ children }) {
 
 /* ---------- Hooks used by pages and components ---------- */
 export const useProducts = () => useContext(CmsContext).products;
-export const useGallery = () => useContext(CmsContext).gallery;
+export const useCategories = () => useContext(CmsContext).categories;
+export const useArticles = () => useContext(CmsContext).articles;
 export const useCmsStatus = () => useContext(CmsContext).status; // "loading" | "ready"
 
-export function findProduct(products, slug) {
-  return products.find((p) => p.slug === slug);
+export const findArticle = (articles, slug) => articles.find((a) => a.slug === slug);
+
+/* Featured products for the Home page (falls back to the first 6) */
+export function featuredProducts(products, count = 6) {
+  const f = products.filter((p) => p.featured);
+  return (f.length ? f : products).slice(0, count);
 }
 
-export function relatedProducts(products, slug, count = 3) {
-  const i = products.findIndex((p) => p.slug === slug);
-  if (i < 0 || products.length < 2) return [];
-  return Array.from({ length: Math.min(count, products.length - 1) }, (_, k) => products[(i + k + 1) % products.length]);
-}
+/* "7 Nov 2026" */
+export const formatDate = (iso) => {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+};
+
+/* Approx. reading time in minutes */
+export const readMinutes = (text = "") => Math.max(1, Math.round(String(text).split(/\s+/).length / 200));

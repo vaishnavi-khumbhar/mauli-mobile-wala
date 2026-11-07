@@ -10,7 +10,7 @@ export default function ProductCard({ product, index }) {
         href={whatsappUrl(`Hello Mauli Mobile Wala, I'm interested in ${product.name}. Please share details.`)}
         target="_blank"
         rel="noopener noreferrer"
-        className="card group flex h-full flex-col overflow-hidden hover:shadow-card"
+        className="card shine-card group flex h-full flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-blue/40 hover:shadow-[0_24px_50px_-20px_rgba(238,20,80,0.45)]"
         aria-label={`Enquire about ${product.name} on WhatsApp`}
       >
         <div className="relative aspect-[4/3] overflow-hidden">
@@ -21,6 +21,11 @@ export default function ProductCard({ product, index }) {
             size="1200 × 900"
             className="h-full w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
           />
+          {product.badge && (
+            <span className="absolute right-4 top-4 z-10 rounded-full bg-blue px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-card">
+              {product.badge}
+            </span>
+          )}
           {typeof index === "number" && (
             <span className="absolute left-4 top-4 bg-cream/95 px-2.5 py-1 font-serif text-sm text-navy">
               {String(index + 1).padStart(2, "0")}
@@ -34,6 +39,7 @@ export default function ProductCard({ product, index }) {
             <span className="gold-underline pb-1">{product.name}</span>
           </h3>
           <p className="mt-3 flex-1 text-[15px] leading-relaxed text-grey">{product.shortDescription}</p>
+          {product.price && <p className="mt-4 font-serif text-[20px] font-semibold text-navy">{product.price}</p>}
           <span className="mt-6 inline-flex items-center gap-2 font-serif text-[15px] text-blue transition-colors group-hover:text-gold">
             Enquire on WhatsApp
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" strokeWidth={1.5} />

@@ -44,6 +44,7 @@ export const stores = [
     no: "02",
     name: "Beed",
     region: "Beed, Maharashtra",
+    tag: "Main Branch",
     address: "Shop No. 07, 1st Floor, Sarda Central, D P Road, Beed, Maharashtra 431122",
     query: "Sarda Central, D P Road, Beed, Maharashtra 431122",
     image: media.stores[1],
@@ -92,6 +93,8 @@ export const navLinks = [
   { label: "About", to: "/about" },
   { label: "Products", to: "/products" },
   { label: "Our Stores", to: "/stores" },
+  { label: "Franchise", to: "/franchise", highlight: true },
+  { label: "Articles", to: "/articles" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -158,3 +161,36 @@ export const whyUs = [
 ];
 
 export const brands = ["Apple", "Samsung", "Vivo", "& more"];
+
+/* ---- Numbers (animated counters) — edit values here ---------------------
+   value = number to count up to, prefix/suffix = text around it            */
+export const stats = [
+  { value: 200000, suffix: "+", label: "Happy Customers", note: "Products sold since 2009", format: "lakh" },
+  { value: 100, suffix: "+", label: "Brands", note: "Smartphones, accessories & electronics" },
+  { value: 100, suffix: "+", label: "Team Members", note: "Trained sales & support staff" },
+  { value: 500, prefix: "₹", suffix: " Cr+", label: "Turnover", note: "Business volume till date" },
+];
+
+/* ---- Authorisations (shown as trust badges) ---------------------------- */
+export const authorisations = [
+  { brand: "Samsung", title: "Authorised Distributor", text: "Through our group company Navya Corporation — authorised Samsung distributor for Beed district, supplying genuine Samsung stock to retailers." },
+  { brand: "Apple iPhone", title: "Authorised Reseller", text: "Original Apple iPhones with official brand warranty and genuine accessories." },
+];
+
+/* ---- Franchise ------------------------------------------------------------ */
+export const franchise = {
+  benefits: [
+    { title: "Trusted Brand Since 2009", text: "Start with a name customers in Beed and Pune already know and trust.", icon: "BadgeCheck" },
+    { title: "Strong Brand Partnerships", text: "Benefit from our relationships as a Samsung authorised distributor and Apple iPhone authorised reseller.", icon: "ShieldCheck" },
+    { title: "100+ Brands to Sell", text: "Access a wide range of smartphones, accessories and electronics from day one.", icon: "Smartphone" },
+    { title: "Proven Store Model", text: "Store setup, product display and selling methods tested across our own outlets.", icon: "Store" },
+    { title: "Training & Support", text: "Guidance for you and your staff, learned from running a 100+ member team.", icon: "UserCheck" },
+    { title: "Competitive Pricing", text: "Purchase advantages that help your store offer customers better prices.", icon: "Tag" },
+  ],
+  steps: [
+    { title: "Send an Enquiry", text: "Fill the form or message us on WhatsApp." },
+    { title: "Discussion", text: "Our team calls you to understand your location and plans." },
+    { title: "Location Review", text: "We review the area and the shop space together with you." },
+    { title: "Launch Your Store", text: "Setup, stock and training — and your Mauli Mobile Wala store opens." },
+  ],
+};

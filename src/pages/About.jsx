@@ -7,6 +7,9 @@ import Button from "../components/Button";
 import CtaBanner from "../components/CtaBanner";
 import Icon from "../components/Icon";
 import { stores, whyUs } from "../data/site";
+import StatsCounter from "../components/StatsCounter";
+import AuthorisedBadges from "../components/AuthorisedBadges";
+import FranchiseCta from "../components/FranchiseCta";
 
 export default function About() {
   useSeo({
@@ -32,6 +35,8 @@ export default function About() {
           <Button to="/products" variant="secondary" className="w-full sm:w-auto">Explore Products</Button>
         </div>
       </PageHero>
+
+      <StatsCounter />
 
       <section className="section bg-ivory">
         <div className="container-site grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -122,6 +127,10 @@ export default function About() {
           </Reveal>
         </div>
       </section>
+
+      <AuthorisedBadges />
+
+      <FranchiseCta />
 
       <CtaBanner />
     </Page>

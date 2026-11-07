@@ -182,6 +182,7 @@ export default function Contact() {
                       <option value="">Select (optional)</option>
                       {products.map((p) => <option key={p.slug}>{p.name}</option>)}
                       <option>Not sure / Need help choosing</option>
+                      <option>Franchise enquiry</option>
                     </select>
                   </Field>
                   <Field id="message" label="Message" full>

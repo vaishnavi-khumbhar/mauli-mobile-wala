@@ -10,6 +10,13 @@ import ProductGrid from "../components/ProductGrid";
 import CtaBanner from "../components/CtaBanner";
 import Button from "../components/Button";
 import Icon from "../components/Icon";
+import StatsCounter from "../components/StatsCounter";
+import AuthorisedBadges from "../components/AuthorisedBadges";
+import FranchiseCta from "../components/FranchiseCta";
+import BrandMarquee from "../components/BrandMarquee";
+import ArticleCard from "../components/ArticleCard";
+import { Stagger } from "../components/Motion";
+import { useProducts, useArticles, featuredProducts } from "../data/cms";
 
 /* Shared animation settings for this page */
 const inView = { once: true, margin: "-80px" };
@@ -19,6 +26,8 @@ const rise = { hidden: { opacity: 0, y: 40, scale: 0.96 }, show: { opacity: 1, y
 const group = (stagger = 0.12, delay = 0) => ({ hidden: {}, show: { transition: { staggerChildren: stagger, delayChildren: delay } } });
 
 export default function Home() {
+  const products = useProducts();
+  const articles = useArticles();
   useSeo({
     title: "Mauli Mobile Wala | Smartphones, Mobile Accessories & Electronics",
     description:
@@ -29,6 +38,9 @@ export default function Home() {
   return (
     <Page>
       <HeroSlider />
+
+      {/* ───────── Numbers (count-up) ───────── */}
+      <StatsCounter />
 
       {/* ───────── Section 2 — brand intro ───────── */}
       <section id="intro" className="section relative overflow-hidden bg-cream">
@@ -101,6 +113,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ───────── Samsung / Apple authorisations ───────── */}
+      <AuthorisedBadges />
+
       {/* ───────── Products ───────── */}
       <section className="section bg-ivory">
         <div className="container-site">
@@ -115,10 +130,12 @@ export default function Home() {
             </Reveal>
           </div>
           <div className="mt-14 [&_article>a]:transition-all [&_article>a]:duration-500 [&_article>a:hover]:-translate-y-2">
-            <ProductGrid />
+            <ProductGrid items={featuredProducts(products)} numbered={false} />
           </div>
         </div>
       </section>
+
+      <BrandMarquee dark />
 
       {/* ───────── Why us ───────── */}
       <section className="section bg-cream">
@@ -227,6 +244,26 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
+
+      {/* ───────── Latest articles ───────── */}
+      {articles.length > 0 && (
+        <section className="section bg-ivory">
+          <div className="container-site">
+            <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+              <SectionHeading eyebrow="Articles & Stories" title="From Our Journal" text="Our story, store news and smart buying tips." />
+              <Reveal className="shrink-0" delay={0.2}>
+                <Button to="/articles" variant="secondary">View All Articles</Button>
+              </Reveal>
+            </div>
+            <Stagger className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8" s={0.12}>
+              {articles.slice(0, 3).map((a) => <ArticleCard key={a.slug} article={a} />)}
+            </Stagger>
+          </div>
+        </section>
+      )}
+
+      {/* ───────── Franchise appeal ───────── */}
+      <FranchiseCta />
 
       <CtaBanner />
     </Page>
